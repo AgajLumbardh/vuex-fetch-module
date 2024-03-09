@@ -1,6 +1,6 @@
 {
   "name": "vuex-fetch-module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A small library for request state management when using Vuex.",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "files": [
     "lib"
   ],
-  "types": "dist/src/index.d.ts",
+  "types": "lib/src/index.d.ts",
   "author": "Lumbardh Agaj",
   "license": "MIT",
   "private": false,
