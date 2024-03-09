@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vuex@4.1.0/dist/vuex.global.js"></script>
+    <script src="../../dist/index.js"></script>
+  </head>
+  <body>
+    <script>
+      const todosModule = VuexFetchModule.createFetchModule({
+        endpoints: (builder) => ({
+          retrieve: builder.create({
+            requestFn: async (id) => {
+              console.log('Retrieving todo item with id:', id);
+              return Promise.resolve({ id: '1', name: 'Lunch with Jon Doe', isCompleted: false });
+            },
+          }),
+          list: builder.create({
+            requestFn: async() => {
+              console.log('Listing todo items');
+              return Promise.resolve([{ id: '1', name: 'Lunch with Joe Doe', isCompleted: false }]);
+            },
+          }),
+          delete: builder.create({
+            requestFn: async(id, dispatch) => {
+              console.log('Deleting a todo item with id:', id);
+              dispatch('list');
+            }
+          })
+        })
+      });
+
+      const booksModule = VuexFetchModule.createFetchModule({
+        endpoints: (builder) =>({
+          list: builder.create({
+            requestFn: async () => {
+              return Promise.resolve([{ id: '1', title: 'Dune', author: 'Frank Herbert' }]);
+            }
+          }),
+        })
+      })
+
+      const store = Vuex.createStore({
+        modules: {
+          todos: todosModule,
+          books: booksModule,
+        }
+      })
+
+      store.dispatch('todos/list');
+      store.dispatch('todos/delete', '123');
+
+      const main = () => {
+        setTimeout(() => {
+          const {data, isLoading, error} = store.getters['todos/list'];
+          console.log('data:', JSON.stringify(data));
+          console.log('isLoading:', isLoading);
+          console.log('error:', error);
+        }, 500);
+      }
+
+      main();
+    </script>
+  </body>
+</html>
